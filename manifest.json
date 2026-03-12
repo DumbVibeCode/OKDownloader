@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "OK.ru Music Downloader",
+  "version": "1.0",
+  "description": "Массовое скачивание музыки с Одноклассников",
+  "permissions": [
+    "downloads",
+    "downloads.shelf",
+    "storage",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "*://*.ok.ru/*",
+    "*://*.okcdn.ru/*",
+    "*://*.mycdn.me/*",
+    "*://*.odnoklassniki.ru/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.ok.ru/*", "*://*.odnoklassniki.ru/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "OK Music Downloader",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}

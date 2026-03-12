@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>OK Music Downloader</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      width: 340px;
+      background: #1a1a2e;
+      color: #eee;
+    }
+
+    /* ── Шапка ── */
+    header {
+      background: #e8323c;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header .logo { font-size: 18px; }
+    header .title { font-size: 14px; font-weight: 700; flex: 1; color: #fff; }
+    #btn-settings {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      padding: 2px 4px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: color 0.15s, background 0.15s;
+    }
+    #btn-settings:hover, #btn-settings.active { color: #fff; background: rgba(0,0,0,0.2); }
+
+    /* ── Треки ── */
+    #view-tracks { display: block; }
+    #status { padding: 12px; color: #777; font-style: italic; text-align: center; }
+    #track-list { max-height: 300px; overflow-y: auto; }
+    .track-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-bottom: 1px solid #2a2a4a;
+    }
+    .track-item:hover { background: #23233d; }
+    .track-item input[type=checkbox] { flex-shrink: 0; accent-color: #e8323c; }
+    .track-info { flex: 1; overflow: hidden; }
+    .track-title { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-artist { font-size: 11px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-dl { font-size: 15px; cursor: pointer; color: #e8323c; background: none; border: none; flex-shrink: 0; padding: 2px 4px; }
+    .track-dl:hover { color: #ff6070; }
+    footer {
+      padding: 8px 12px; display: flex; gap: 6px; flex-wrap: wrap;
+      border-top: 1px solid #2a2a4a;
+    }
+    footer button {
+      cursor: pointer; border: none; border-radius: 5px;
+      padding: 5px 10px; font-size: 12px; font-weight: 600;
+    }
+    #btn-select-all, #btn-deselect { background: #2a2a4a; color: #ddd; }
+    #btn-select-all:hover, #btn-deselect:hover { background: #3a3a6a; color: #fff; }
+    #btn-dl-all { background: #e8323c; color: #fff; flex: 1; }
+    #btn-dl-all:hover { background: #c42030; }
+    #btn-clear { background: #2a2a4a; color: #e8323c; }
+    #btn-clear:hover { background: #3a3a6a; }
+    #hint { padding: 8px 12px; font-size: 11px; color: #555; line-height: 1.4; }
+
+    /* ── Настройки ── */
+    #view-settings { display: none; padding: 14px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; color: #aaa; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .field input[type=text], .field input[type=number] {
+      width: 100%; padding: 7px 10px; background: #23233d;
+      border: 1px solid #3a3a60; border-radius: 5px; color: #fff; font-size: 13px; outline: none;
+    }
+    .field input[type=number] { width: 70px; }
+    .field input:focus { border-color: #e8323c; }
+    .field .hint { font-size: 10px; color: #555; margin-top: 4px; }
+    .field .preview { font-size: 11px; color: #888; margin-top: 5px; font-family: monospace; }
+    .settings-footer { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+    #btn-save { background: #e8323c; color: #fff; border: none; border-radius: 5px; padding: 6px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    #btn-save:hover { background: #c42030; }
+    #btn-reset-settings { background: #23233d; color: #aaa; border: none; border-radius: 5px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
+    #btn-reset-settings:hover { background: #2e2e50; color: #fff; }
+    #save-status { font-size: 12px; color: #4caf50; opacity: 0; transition: opacity 0.3s; }
+    #save-status.visible { opacity: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">🎵</span>
+    <span class="title">OK Music Downloader</span>
+    <button id="btn-settings" title="Настройки">⚙</button>
+  </header>
+
+  <!-- Вид: список треков -->
+  <div id="view-tracks">
+    <div id="status">Загрузка...</div>
+    <div id="track-list"></div>
+    <footer id="footer" style="display:none">
+      <button id="btn-select-all">Все</button>
+      <button id="btn-deselect">Снять</button>
+      <button id="btn-dl-all">⬇ Скачать</button>
+      <button id="btn-clear">✕</button>
+    </footer>
+    <div id="hint">Воспроизведите треки на ok.ru — они появятся здесь.<br>Или используйте панель прямо на странице.</div>
+  </div>
+
+  <!-- Вид: настройки -->
+  <div id="view-settings">
+    <div class="field">
+      <label>Шаблон имени файла</label>
+      <input type="text" id="filenameFormat" placeholder="{artist} - {title}">
+      <div class="hint">Переменные: {artist} — исполнитель, {title} — название</div>
+      <div class="preview" id="preview"></div>
+    </div>
+    <div class="field">
+      <label>Подпапка в загрузках</label>
+      <input type="text" id="subfolder" placeholder="Оставьте пустым для корня загрузок">
+    </div>
+    <div class="field">
+      <label>Одновременных загрузок</label>
+      <input type="number" id="maxConcurrent" min="1" max="10" value="3">
+      <div class="hint">Рекомендуется 2–3</div>
+    </div>
+    <div class="settings-footer">
+      <button id="btn-save">Сохранить</button>
+      <button id="btn-reset-settings">Сбросить</button>
+      <span id="save-status">✓ Сохранено</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

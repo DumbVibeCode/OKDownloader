@@ -1,0 +1,132 @@
+/* OK Music Downloader — стили контент-скрипта */
+
+/* Карточка трека должна иметь position:relative для абсолютного чекбокса */
+[data-okdl-done] {
+  position: relative !important;
+}
+
+/* Обёртка чекбокса — позиционируется поверх карточки */
+.okdl-cb-wrapper {
+  position: absolute !important;
+  top: 6px !important;
+  left: 6px !important;
+  z-index: 9999 !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(26, 26, 46, 0.75) !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  transition: background 0.15s !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.okdl-cb-wrapper:hover {
+  background: rgba(232, 50, 60, 0.85) !important;
+}
+
+/* Сам чекбокс */
+.okdl-cb {
+  width: 14px !important;
+  height: 14px !important;
+  cursor: pointer !important;
+  accent-color: #e8323c !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Визуальная метка — URL уже захвачен */
+.okdl-captured .okdl-cb-wrapper,
+.okdl-cb-wrapper.okdl-captured {
+  background: rgba(40, 160, 80, 0.8) !important;
+}
+
+/* ─── Панель управления ─────────────────────────────────────────────── */
+
+#okdl-panel {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 2147483647 !important;
+  background: #1a1a2e !important;
+  border: 2px solid #e8323c !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.55) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+  font-size: 13px !important;
+  color: #eee !important;
+  min-width: 220px !important;
+  max-width: 360px !important;
+}
+
+#okdl-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+#okdl-count {
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  color: #fff !important;
+}
+
+#okdl-progress {
+  font-size: 11px !important;
+  color: #aaa !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 240px !important;
+}
+
+#okdl-btns {
+  display: flex !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+#okdl-btns button {
+  cursor: pointer !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 5px 11px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  transition: background 0.15s !important;
+  outline: none !important;
+}
+
+#okdl-btn-all,
+#okdl-btn-none {
+  background: #2a2a4a !important;
+  color: #ddd !important;
+}
+#okdl-btn-all:hover,
+#okdl-btn-none:hover {
+  background: #3a3a6a !important;
+  color: #fff !important;
+}
+
+#okdl-btn-dl {
+  background: #e8323c !important;
+  color: #fff !important;
+  flex: 1 !important;
+}
+#okdl-btn-dl:hover:not(:disabled) {
+  background: #c42030 !important;
+}
+#okdl-btn-dl:disabled {
+  background: #555 !important;
+  color: #aaa !important;
+  cursor: not-allowed !important;
+}
