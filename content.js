@@ -17,7 +17,8 @@
     "wm-track",
     "[data-l='t,track']",
     ".music-card",
-    "[class*='music-card']"
+    "[class*='music-card']",
+    ".portal_search_music-track-card" // поиск по сайту (portal search)
   ];
 
   // Кнопки Play внутри карточки
@@ -25,12 +26,14 @@
     "[data-l='t,play']",              // профиль (подтверждён)
     ".music-play.js-play",
     ".js-play",
-    "[class*='music-play']"
+    "[class*='music-play']",
+    ".portal_search_play-control"     // поиск по сайту (portal search)
   ];
 
   // Элемент с названием трека (для старой разметки)
   const TITLE_SELECTORS = [
     ".track-with-cover_name",         // профиль (подтверждён)
+    ".portal_search_title2",          // поиск по сайту (portal search)
     "[class*='_name']",
     "[class*='title']"
   ];
@@ -39,6 +42,7 @@
   const ARTIST_SELECTORS = [
     "[data-l='t,artist']",            // поиск — Web Component (подтверждён)
     ".track-with-cover_artist",       // профиль/группа (подтверждён)
+    ".portal_search_artist-link",     // поиск по сайту (portal search)
     "[class*='_artist']",
     "[class*='performer']"
   ];
